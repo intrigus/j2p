@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.github.javaparser:javaparser-core:2.2.2'   
+}
+
+eclipse {
+    // need to specify Java source sets explicitely, SpringSource Gradle Eclipse plugin
+    // ignores any nodes added in classpath.file.withXml
+    sourceSets {
+        main {
+            java.srcDirs "src"
+        }
+    }
+
+    jdt {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+    }
+
+    classpath {
+        plusConfigurations += [project.configurations.compile]
+    }
+
+    project {
+        name = "j2p"
+        natures 'org.eclipse.jdt.core.javanature'
+        buildCommands.clear();
+        buildCommand "org.eclipse.jdt.core.javabuilder"
+    }
+}
